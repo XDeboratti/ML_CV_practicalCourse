@@ -10,12 +10,12 @@ This project focuses on developing an object detection model to recognize right-
 ## Datasets
 We are exploring several datasets for traffic signs:
 - [Mapillary Traffic Sign Dataset](https://www.mapillary.com/dataset)
-- [DFG Traffic Sign Dataset](https://www.dfg.de/traffic-sign-dataset)
+- [DFG Traffic Sign Dataset]([https://www.dfg.de/traffic-sign-dataset](https://www.vicos.si/resources/dfg/))
 - EVOTEGRA (pending access)
 
 ## Models
 We plan to test and evaluate multiple models, including:
-- Convolutional Neural Networks (CNN): Faster R-CNN, with backbone options of [VGG16](https://arxiv.org/abs/1409.1556) or [ResNet50](https://arxiv.org/abs/1512.03385)
+- Convolutional Neural Networks (CNN): Faster R-CNN, with backbone options of [VGG16]([https://arxiv.org/abs/1409.1556](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html)) or [ResNet50]([https://arxiv.org/abs/1512.03385](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html))
 - Transformer-based model: [DETR](https://github.com/facebookresearch/detr)
 
 The initial model testing phase will guide us in selecting the best dataset-model combinations for further training and fine-tuning.
