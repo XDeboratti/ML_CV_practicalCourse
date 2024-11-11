@@ -10,12 +10,12 @@ This project focuses on developing an object detection model to recognize right-
 ## Datasets
 We are exploring several datasets for traffic signs:
 - [Mapillary Traffic Sign Dataset](https://www.mapillary.com/dataset)
-- [DFG Traffic Sign Dataset]([https://www.dfg.de/traffic-sign-dataset](https://www.vicos.si/resources/dfg/))
+- [DFG Traffic Sign Dataset](https://www.vicos.si/resources/dfg/)
 - EVOTEGRA (pending access)
 
 ## Models
 We plan to test and evaluate multiple models, including:
-- Convolutional Neural Networks (CNN): Faster R-CNN, with backbone options of [VGG16]([https://arxiv.org/abs/1409.1556](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html)) or [ResNet50]([https://arxiv.org/abs/1512.03385](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html))
+- Convolutional Neural Networks (CNN): Faster R-CNN, with backbone options of [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html) or [ResNet50](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html)
 - Transformer-based model: [DETR](https://github.com/facebookresearch/detr)
 
 The initial model testing phase will guide us in selecting the best dataset-model combinations for further training and fine-tuning.
@@ -30,5 +30,4 @@ The project is structured into phases:
 6. **Final Extensions and Presentation Preparation** (09.01 - Project End)
 
 ## Team
-This project is developed by a team of four members, including [@XDeboratti](https://github.com/XDeboratti),[@mqrek](https://github.com/mqrek),[@sh1negg](https://github.com/sh1negg),[] each responsible for specific model-dataset combinations, augmentations, and evaluation steps.
-
+This project is developed by a team of four members, including [@XDeboratti](https://github.com/XDeboratti), [@mqrek](https://github.com/mqrek), and [@sh1negg](https://github.com/sh1negg), each responsible for specific model-dataset combinations, augmentations, and evaluation steps.
