@@ -15,7 +15,7 @@ We are exploring several datasets for traffic signs:
 
 ## Models
 We plan to test and evaluate multiple models, including:
-- Convolutional Neural Networks (CNN): Faster R-CNN, with backbone options of [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html) or [ResNet50](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html)
+- Convolutional Neural Networks (CNN): [Faster R-CNN](https://pytorch.org/vision/main/models/faster_rcnn.html) and [SSD](https://pytorch.org/hub/nvidia_deeplearningexamples_ssd/), with backbone options of [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html) or [ResNet50](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html)
 - Transformer-based model: [DETR](https://github.com/facebookresearch/detr)
 
 The initial model testing phase will guide us in selecting the best dataset-model combinations for further training and fine-tuning.
