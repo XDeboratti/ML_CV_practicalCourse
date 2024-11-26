@@ -162,4 +162,11 @@ cython_debug/
 #.idea/
 
 
+#VsCode
+.vscode/
+
+
+#CheckpointData
+lightning_logs/
+
 
