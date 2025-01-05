@@ -41,10 +41,10 @@ class Detector(pl.LightningModule):
 
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
-        self.model = create_model(1080)
-        #self.transform = DataAugmentation()  # per batch augmentation_kornia
+        self.model = create_model(900)
+        self.transform = DataAugmentation()  # per batch augmentation_kornia
         self.batch_size = 16
-        self.num_epochs = 50
+        self.num_epochs = 100
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
 
 

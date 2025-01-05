@@ -64,12 +64,4 @@ for c in intermedClassMapping:
       else:
             classMapping[c] = 11
 print(classMapping)
-
-# for annotation in annotations:
-#     if labels.get(annotation['image_id'], None) is None: #we didn't see any annotations for this image yet
-#         labels[annotation['image_id']] = {'boxes': [transform_bbox(annotation['bbox'])], 'class': [classMapping['category_id']]}
-#     else: #we already saw annotations for this image
-#         labels[annotation['image_id']]['boxes'].append(transform_bbox(annotation['bbox']))
-#         labels[annotation['image_id']]['class'].append(classMapping['category_id'])
-
     

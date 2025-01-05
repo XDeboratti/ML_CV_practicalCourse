@@ -1,5 +1,5 @@
 from data.DFG.dfg_dataset import DFG_Dataset
-from data.augmentation import DataAugmentation
+from data.augmentation import DataAugmentationBlur
 import numpy as np
 import torch
 
@@ -36,13 +36,13 @@ def create_model(size=300):
     return model
 
 class Detector(pl.LightningModule):
-    def __init__(self, **kwargs):
+    def __init__(self, sigma, **kwargs):
         super().__init__()
 
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
         self.model = create_model(1080)
-        #self.transform = DataAugmentation()  # per batch augmentation_kornia
+        self.transform = DataAugmentationBlur(sigma)  # per batch augmentation_kornia
         self.batch_size = 16
         self.num_epochs = 50
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
@@ -104,10 +104,10 @@ class Detector(pl.LightningModule):
         #return [optimizer], [scheduler]
         return [optimizer]
 
-
-net = Detector()
-checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
-lr_monitor = LearningRateMonitor(logging_interval='step')
-tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns")
-trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
-trainer.fit(net)
+for i in  np.arange(0.2, 1.1, 0.2):
+    net = Detector(i)
+    checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
+    lr_monitor = LearningRateMonitor(logging_interval='step')
+    tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns", version='gb_grid_'+str(i))
+    trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
+    trainer.fit(net)

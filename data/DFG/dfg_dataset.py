@@ -10,6 +10,7 @@ import lightning as pl
 from torchmetrics.detection import MeanAveragePrecision
 from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
 from lightning.fabric.utilities.seed import seed_everything
+from ..augmentation import DataAugmentation
 
 seed_everything(1234)
 
@@ -23,6 +24,11 @@ class DFG_Dataset(Dataset):
         with open(data_dir+'DFG-tsd-annot-json/'+phase+'.json') as f:
             labels_file = json.load(f)
 
+        #store filenames and ids (filenames for ids) if we have id 0, the name of the file can be found in image_files[0]
+        #ToDo: What if an ID/name is missing?! What if there ar not equally many?
+        self.image_files = [image['file_name'] for image in labels_file['images']]
+        self.image_ids = [image['id'] for image in labels_file['images']]
+
         #the json is split into 
         # - images[id, height, width, file_name]
         # - categories[id, name, supercategory] 
@@ -34,13 +40,8 @@ class DFG_Dataset(Dataset):
         # - 'class' is the key for a tensor containing the classes for the boxes 
         self.labels = {}
         self.compute_labels(labels_file)
+        self.augmentor = DataAugmentation()
 
-        #store filenames and ids (filenames for ids) if we have id 0, the name of the file can be found in image_files[0]
-        #ToDo: What if an ID/name is missing?! What if there ar not equally many?
-        self.image_files = [image['file_name'] for image in labels_file['images']]
-        self.image_ids = [image['id'] for image in labels_file['images']]
-        
-    
     def compute_labels(self, labels_file):
         annotations = labels_file['annotations']
         for annotation in annotations:
@@ -52,7 +53,21 @@ class DFG_Dataset(Dataset):
 
     def compute_labels_reducedClasses(self, labels_file):
         annotations = labels_file['annotations']
-        classes = {}
+        classes = {} 
+        annotation_count = [x['category_id'] for x in annotations]
+        annotation_count = np.bincount(np.array(annotation_count))
+        merge_index = annotation_count <= 20
+        merge_index[38:82] = False
+        merge_index[161:171] = False
+        merge_id_mapping = np.arange(0, 200)
+        merge_id_mapping[merge_index] = 11
+
+        class_shift = np.insert(np.cumsum(merge_index), 0, 0)[:len(merge_id_mapping)]
+        class_shift[merge_index] = 0
+        class_shift -= 1
+        class_shift[class_shift < 0] = 0
+        merge_id_mapping -= class_shift
+
         for annotation in annotations:
             if classes.get(annotation['category_id'], None) is None:
                 classes[annotation['category_id']] = 1
@@ -90,13 +105,21 @@ class DFG_Dataset(Dataset):
                     counter += 1
             else:
                     classMapping[c] = 11
+        
+        labels_new = {}
 
         for annotation in annotations:
             if self.labels.get(annotation['image_id'], None) is None: #we didn't see any annotations for this image yet
                 self.labels[annotation['image_id']] = {'boxes': [self.transform_bbox(annotation['bbox'])], 'class': [classMapping[annotation['category_id']]]}
+                labels_new[annotation['image_id']] = {'boxes': [self.transform_bbox(annotation['bbox'])], 'class': [merge_id_mapping[annotation['category_id']]]}
             else: #we already saw annotations for this image
                 self.labels[annotation['image_id']]['boxes'].append(self.transform_bbox(annotation['bbox']))
                 self.labels[annotation['image_id']]['class'].append(classMapping[annotation['category_id']])
+
+                labels_new[annotation['image_id']]['boxes'].append(self.transform_bbox(annotation['bbox']))
+                labels_new[annotation['image_id']]['class'].append(merge_id_mapping[annotation['category_id']])
+        aaaaaa = self.labels == labels_new
+        print()
     
     #boxes are provided in coco format bbx[x, y, w, h] where x & y are the coordinates of the upper left corner
     #we need the boxes in bbx[x1, y1, x2, y2] where 1 is the upper left corner and y is the lower right corner of the box
@@ -146,7 +169,7 @@ class DFG_Dataset(Dataset):
     #get image and corresponding target
     def __getitem__(self, index):
         image_file = self.image_files[index]
-        #imread gives us a tensor of shape width x length x color, we need color x width x length, cast to float tensor
+        #imread gives us a tensor of shape width x length x color, we need color x length x width for the augmentation, cast to float tensor
         image = torch.as_tensor(self.get_image(image_file)).permute((2, 0, 1)).float()
         
         
@@ -156,9 +179,15 @@ class DFG_Dataset(Dataset):
         #cast the labels to tensors and return    
         target = {'boxes': torch.as_tensor(label['boxes']).float(), 'labels': torch.as_tensor(label['class']).long()}
 
-        #self.drawImageWBbox(image_file, label)
+        # for x in target['labels']:
+        #      if x == 0:
+        #           self.drawImageWBbox(image_file, label)
+
+        if self.phase == 'train':
+            image, target = self.augmentor(image, target)
         return image, target
     
     @staticmethod
     def collate_fn(batch):
         return tuple(zip(*batch))
+    
