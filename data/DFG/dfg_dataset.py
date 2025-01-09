@@ -183,8 +183,8 @@ class DFG_Dataset(Dataset):
         #      if x == 0:
         #           self.drawImageWBbox(image_file, label)
 
-        if self.phase == 'train':
-            image, target = self.augmentor(image, target)
+        #if self.phase == 'train':
+            #image, target['boxes'] = self.augmentor(image, target['boxes'])
         return image, target
     
     @staticmethod

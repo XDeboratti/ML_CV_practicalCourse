@@ -41,8 +41,7 @@ class Detector(pl.LightningModule):
 
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
-        self.model = create_model(900)
-        self.transform = DataAugmentation()  # per batch augmentation_kornia
+        self.model = create_model(300)
         self.batch_size = 16
         self.num_epochs = 100
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
@@ -108,6 +107,6 @@ class Detector(pl.LightningModule):
 net = Detector()
 checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
 lr_monitor = LearningRateMonitor(logging_interval='step')
-tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns")
+tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns", version='lowRes2')
 trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
 trainer.fit(net)

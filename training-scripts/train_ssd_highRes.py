@@ -36,15 +36,14 @@ def create_model(size=300):
     return model
 
 class Detector(pl.LightningModule):
-    def __init__(self, num_epochs = 50, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__()
 
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
-        self.model = create_model(1080)
-        self.transform = DataAugmentation()  # per batch augmentation_kornia
+        self.model = create_model(300)
         self.batch_size = 16
-        self.num_epochs = num_epochs
+        self.num_epochs = 100
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
 
 
@@ -97,19 +96,17 @@ class Detector(pl.LightningModule):
 
     def configure_optimizers(self):
         #ToDo: read Adam
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)#what about eps, weight_decay, maximize
-        #optimizer = torch.optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9, weight_decay=0.0005)
+        #optimizer = torch.optim.Adam(self.model.parameters(), lr=0.01)
+        optimizer = torch.optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9, weight_decay=0.0005)
         #ToDo: read about scheduler, experiment
-        #after every batch. step should be called after a batch has been used for training.
-
-        scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, total_steps=self.total_steps(), max_lr=0.01, pct_start=0.1, anneal_strategy='cos', cycle_momentum= True, base_momentum= 0.85, max_momentum= 0.95, div_factor= 25.0, final_div_factor= 1000.0, last_epoch=-1)
-        return [optimizer], [scheduler]
-        #return [optimizer]
+        #scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, total_steps=self.total_steps(), max_lr=0.01, pct_start=0.1, anneal_strategy='cos', cycle_momentum= True, base_momentum= 0.85, max_momentum= 0.95, div_factor= 25.0, final_div_factor= 10000.0, last_epoch=-1)
+        #return [optimizer], [scheduler]
+        return [optimizer]
 
 
-net = Detector(50)
+net = Detector()
 checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
 lr_monitor = LearningRateMonitor(logging_interval='step')
-tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns", version='AdamExp01')
+tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns", version='lowRes')
 trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
 trainer.fit(net)
