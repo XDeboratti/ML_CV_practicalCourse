@@ -10,13 +10,13 @@ import lightning as pl
 from torchmetrics.detection import MeanAveragePrecision
 from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
 from lightning.fabric.utilities.seed import seed_everything
-from ..augmentation import DataAugmentation
+from ..augmentation import DataAugmentationScale, DataAugmentationGrid, DataAugmentationBlur, DataAugmentationTranslate
 
 seed_everything(1234)
 
 
 class DFG_Dataset(Dataset):
-    def __init__(self, data_dir, phase='train'):
+    def __init__(self, stddev, data_dir, phase='train'):
         super().__init__()
         self.data_dir = data_dir
         self.phase = phase
@@ -40,7 +40,8 @@ class DFG_Dataset(Dataset):
         # - 'class' is the key for a tensor containing the classes for the boxes 
         self.labels = {}
         self.compute_labels(labels_file)
-        self.augmentor = DataAugmentation()
+        self.translate = stddev
+        self.augmentor = DataAugmentationTranslate(self.translate)
 
     def compute_labels(self, labels_file):
         annotations = labels_file['annotations']
@@ -118,8 +119,8 @@ class DFG_Dataset(Dataset):
 
                 labels_new[annotation['image_id']]['boxes'].append(self.transform_bbox(annotation['bbox']))
                 labels_new[annotation['image_id']]['class'].append(merge_id_mapping[annotation['category_id']])
-        aaaaaa = self.labels == labels_new
-        print()
+        #aaaaaa = self.labels == labels_new
+        #print()
     
     #boxes are provided in coco format bbx[x, y, w, h] where x & y are the coordinates of the upper left corner
     #we need the boxes in bbx[x1, y1, x2, y2] where 1 is the upper left corner and y is the lower right corner of the box
@@ -183,8 +184,8 @@ class DFG_Dataset(Dataset):
         #      if x == 0:
         #           self.drawImageWBbox(image_file, label)
 
-        #if self.phase == 'train':
-            #image, target['boxes'] = self.augmentor(image, target['boxes'])
+        if self.phase == 'train':
+            image, target['boxes'] = self.augmentor(image, target['boxes'])
         return image, target
     
     @staticmethod

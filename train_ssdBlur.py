@@ -42,10 +42,11 @@ class Detector(pl.LightningModule):
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
         self.model = create_model(1080)
-        self.transform = DataAugmentationBlur(sigma)  # per batch augmentation_kornia
+        #self.transform = DataAugmentationBlur(sigma)  # per batch augmentation_kornia
         self.batch_size = 16
         self.num_epochs = 50
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
+        self.gb_sigma = sigma
 
 
     
@@ -53,8 +54,8 @@ class Detector(pl.LightningModule):
         return self.model(x)
 
     def prepare_data(self):
-        self.train_dataset = DFG_Dataset('/graphics/scratch2/students/kornwolfd/data_RoadSigns/dfg/', phase='train')
-        self.val_dataset = DFG_Dataset('/graphics/scratch2/students/kornwolfd/data_RoadSigns/dfg/', phase='test')
+        self.train_dataset = DFG_Dataset(self.gb_sigma, '/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/dfg/', phase='train')
+        self.val_dataset = DFG_Dataset(self.gb_sigma, '/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/dfg/', phase='test')
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, pin_memory=True, num_workers=4, collate_fn=self.train_dataset.collate_fn)
@@ -106,8 +107,8 @@ class Detector(pl.LightningModule):
 
 for i in  np.arange(0.2, 1.1, 0.2):
     net = Detector(i)
-    checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
+    checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/checkpoint_RoadSigns/DFG_firstExperiments', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
     lr_monitor = LearningRateMonitor(logging_interval='step')
-    tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/lightningLogs_RoadSigns", version='gb_grid_'+str(i))
+    tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/lightningLogs_RoadSigns", version='new_gb_grid_'+str(i))
     trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
     trainer.fit(net)
