@@ -48,7 +48,7 @@ def split_dataset(images_dir, annotations_dir, output_dir, train_ratio=0.7, val_
     print(f"Dataset erfolgreich aufgeteilt: {len(train_data)} train, {len(val_data)} val, {len(test_data)} test")
 
 
-images_dir = "images_relevant"
-annotations_dir = "annotations_relevant"
-output_dir = "."
+images_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/images_relevant"
+annotations_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/annotations_relevant"
+output_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary"
 split_dataset(images_dir, annotations_dir, output_dir)

@@ -77,7 +77,6 @@ class DataAugmentationTranslate(nn.Module):
 
     def __init__(self, translationFactor) -> None:
         super().__init__()
-        #ToDo: Sven: How much translation is probably useful?
         self.transforms = AugmentationSequential(
             RandomAffine(degrees=0.0, translate=(translationFactor, translationFactor), padding_mode=0, p=1.0, keepdim=True),
             data_keys=['input', 'bbox_xyxy']
@@ -93,7 +92,6 @@ class DataAugmentationScale(nn.Module):
 
     def __init__(self, scalingFactor) -> None:
         super().__init__()
-        #ToDo: Sven: How much scaling is probably useful?
         self.transforms = AugmentationSequential(
             RandomAffine(degrees=0.0, scale=(1.0-scalingFactor, 1.0+scalingFactor), padding_mode=0, p=1.0, keepdim=True),
             data_keys=['input', 'bbox_xyxy']

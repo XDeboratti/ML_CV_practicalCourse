@@ -16,7 +16,7 @@ seed_everything(1234)
 
 
 class DFG_Dataset(Dataset):
-    def __init__(self, stddev, data_dir, phase='train'):
+    def __init__(self, aug_parameter, data_dir, phase='train'):
         super().__init__()
         self.data_dir = data_dir
         self.phase = phase
@@ -40,8 +40,8 @@ class DFG_Dataset(Dataset):
         # - 'class' is the key for a tensor containing the classes for the boxes 
         self.labels = {}
         self.compute_labels(labels_file)
-        self.translate = stddev
-        self.augmentor = DataAugmentationTranslate(self.translate)
+        self.aug_parameter = aug_parameter
+        self.augmentor = DataAugmentationTranslate(self.aug_parameter)
 
     def compute_labels(self, labels_file):
         annotations = labels_file['annotations']

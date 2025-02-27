@@ -26,8 +26,8 @@ def filter_images(annotation_dir, image_dir, output_image_dir):
 
 
 if __name__ == "__main__":
-    annotation_dir = "annotations_relevant"  
-    image_dir = "all_images" 
-    output_image_dir = "images_relevant" 
+    annotation_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/annotations_relevant"  
+    image_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/images" 
+    output_image_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/images_relevant" 
 
     filter_images(annotation_dir, image_dir, output_image_dir)

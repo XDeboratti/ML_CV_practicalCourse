@@ -27,8 +27,8 @@ def filter_annotations(annotation_dir, target_labels, output_annotation_dir):
     print(f"Gefilterte Annotationen: {relevant_count} Dateien mit relevanten Labels gespeichert.")
 
 if __name__ == "__main__":
-    annotation_dir = "annotations"  
-    output_annotation_dir = "annotations_relevant"  
+    annotation_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/mtsd_v2_fully_annotated/annotations"  
+    output_annotation_dir = "/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/annotations_relevant"  
 
     target_labels = ["regulatory--stop--g1","regulatory--yield--g1","regulatory--priority-road--g4"]
 
