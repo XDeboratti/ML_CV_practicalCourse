@@ -1,4 +1,5 @@
 import csv
+import json
 import matplotlib.pyplot as plt 
 
 steps = []

@@ -17,10 +17,10 @@ class DataAugmentation(nn.Module):
         self.myGenerator = Generator()
         self.uniqueFilename = 0
         self.transforms = AugmentationSequential(
-            RandomGaussianNoise(mean=0.0, std=0.07, p=1.0, keepdim=True),
+            RandomGaussianNoise(mean=0.0, std=0.03, p=1.0, keepdim=True),
             RandomGaussianBlur((5,5), (0.8, 0.8), p=1.0, keepdim=True),
-            RandomAffine(degrees=0.0, translate=(0.1, 0.1), padding_mode=0, p=1.0, keepdim=True),
-            RandomAffine(degrees=0.0, scale=(0.9, 1.1), padding_mode=0, p=1.0, keepdim=True),
+            RandomAffine(degrees=0.0, translate=(0.15, 0.15), padding_mode=0, p=1.0, keepdim=True),
+            RandomAffine(degrees=0.0, scale=(0.85, 1.15), padding_mode=0, p=1.0, keepdim=True),
             data_keys=['input', 'bbox_xyxy'])
 
     @torch.no_grad()

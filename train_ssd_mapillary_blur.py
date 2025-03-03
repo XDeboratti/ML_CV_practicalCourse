@@ -105,7 +105,7 @@ class Detector(pl.LightningModule):
         #return [optimizer], [scheduler]
         return [optimizer]
 
-for i in  np.arange(0.2, 1.1, 0.2):
+for i in  np.arange(0.4, 1.3, 0.2):
     net = Detector(i, 50)
     checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/checkpoint_RoadSigns/Mapillary', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
     lr_monitor = LearningRateMonitor(logging_interval='step')

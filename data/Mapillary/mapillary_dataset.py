@@ -13,7 +13,7 @@ import lightning as pl
 from torchmetrics.detection import MeanAveragePrecision
 from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
 from lightning.fabric.utilities.seed import seed_everything
-from ..augmentation import DataAugmentationScale, DataAugmentationGrid, DataAugmentationBlur, DataAugmentationTranslate
+from ..augmentation import DataAugmentationScale, DataAugmentationGrid, DataAugmentationBlur, DataAugmentationTranslate, DataAugmentation
 
 seed_everything(1234)
 
@@ -22,7 +22,7 @@ class Mapillary_Dataset(Dataset):
     def __init__(self, aug_parameter, data_dir, phase='train'):
         super().__init__()
         self.aug_parameter = aug_parameter
-        self.augmentor = DataAugmentationTranslate(self.aug_parameter)
+        self.augmentor = DataAugmentation()
         self.data_dir = data_dir+phase+'ing/'+phase
         self.phase = phase
 
@@ -71,8 +71,8 @@ class Mapillary_Dataset(Dataset):
         image = torch.as_tensor(image).permute((2, 0, 1)).float()
 
 
-        if self.phase == 'train':
-            image, target['boxes'] = self.augmentor(image, target['boxes'])
+        #if self.phase == 'train':
+            #image, target['boxes'] = self.augmentor(image, target['boxes'])
         return image, target
     
     @staticmethod

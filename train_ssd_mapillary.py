@@ -40,7 +40,7 @@ class Detector(pl.LightningModule):
 
         #set model to ssd with vgg16 backbone, batch size & Metric for the evaluation
         #ToDo: we should choose the same metric (experiment) & sane batch size (experiment with batch size & epochs)
-        self.model = create_model(1080)
+        self.model = create_model(640)
         self.batch_size = 16
         self.num_epochs = num_epochs
         self.metric = MeanAveragePrecision(iou_type="bbox", class_metrics=True)
@@ -51,8 +51,8 @@ class Detector(pl.LightningModule):
         return self.model(x)
 
     def prepare_data(self):
-        self.train_dataset = Mapillary_Dataset('/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/', phase='train')
-        self.val_dataset = Mapillary_Dataset('/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/', phase='test')
+        self.train_dataset = Mapillary_Dataset(1, '/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/', phase='train')
+        self.val_dataset = Mapillary_Dataset(1, '/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/data_RoadSigns/mapillary/', phase='test')
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, pin_memory=True, num_workers=2, collate_fn=self.train_dataset.collate_fn)
@@ -108,6 +108,6 @@ class Detector(pl.LightningModule):
 net = Detector(50)
 checkpoint_callback = ModelCheckpoint(dirpath='/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/checkpoint_RoadSigns/Mapillary', monitor="mAP_50", filename='{epoch}-{mAP_50:.3f}', mode='max')
 lr_monitor = LearningRateMonitor(logging_interval='step')
-tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/lightningLogs_RoadSigns/Mapillary", version='mapillary_ssd_lr0.001_momentum0.9_wd0.0005')
+tb_logger = pl_loggers.TensorBoardLogger(save_dir="/graphics/scratch2/students/kornwolfd/ML_CV_practicalCourse/lightningLogs_RoadSigns/Mapillary", version='mapillary_ssd_resize640')
 trainer = pl.Trainer(accelerator='gpu', devices=[0], max_epochs=net.num_epochs, num_sanity_val_steps=2, callbacks=[checkpoint_callback, lr_monitor], gradient_clip_val=None, deterministic=True, logger=tb_logger)
 trainer.fit(net)
