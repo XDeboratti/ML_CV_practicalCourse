@@ -15,7 +15,7 @@ We were exploring several datasets for traffic signs:
 We tested and evaluated the following models:
 - [Faster R-CNN](https://pytorch.org/vision/main/models/faster_rcnn.html) with a [ResNet50](https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html) backbone
 - [SSD](https://pytorch.org/hub/nvidia_deeplearningexamples_ssd/), with a [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html) backbone
-- 
+ 
 ## Timeline
 The project was structured into phases:
 1. **Dataset Collection and Analysis** (18.11 - 24.11)
