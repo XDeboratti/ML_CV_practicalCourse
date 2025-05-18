@@ -25,7 +25,6 @@ class DFG_Dataset(Dataset):
             labels_file = json.load(f)
 
         #store filenames and ids (filenames for ids) if we have id 0, the name of the file can be found in image_files[0]
-        #ToDo: What if an ID/name is missing?! What if there ar not equally many?
         self.image_files = [image['file_name'] for image in labels_file['images']]
         self.image_ids = [image['id'] for image in labels_file['images']]
 
@@ -40,8 +39,7 @@ class DFG_Dataset(Dataset):
         # - 'class' is the key for a tensor containing the classes for the boxes 
         self.labels = {}
         self.compute_labels(labels_file)
-        self.aug_parameter = aug_parameter
-        self.augmentor = DataAugmentationTranslate(self.aug_parameter)
+        self.augmentor = DataAugmentationTranslate(aug_parameter)
 
     def compute_labels(self, labels_file):
         annotations = labels_file['annotations']

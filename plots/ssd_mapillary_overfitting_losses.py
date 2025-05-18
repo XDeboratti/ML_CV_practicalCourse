@@ -7,7 +7,7 @@ ssd_loss_noaug = []
 ssd_loss = []
 
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/mapillary_ssd_augm_loss_step.csv') as file:  
+with open('') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
@@ -16,7 +16,7 @@ with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/mapillary_ssd_au
 ssd_loss_every3rd = ssd_loss[:185:3]
 ssd_loss_final = ssd_loss_every3rd[:50]
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/loss_lightning_logs_mapillary_ssd_lr0.001_momentum0.9_wd0.0005.csv') as file:  
+with open('') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
@@ -41,4 +41,4 @@ plt.ylabel('Loss')
 plt.legend() 
 
 
-plt.savefig('/home/kornwolfd/ML_CV_practicalCourse/plots/overfitting_Augnoaug_loss.png')
+plt.savefig('')

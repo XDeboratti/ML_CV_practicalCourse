@@ -9,26 +9,26 @@ ssd_noaug_map = []
 ssd_aug_map = []
 
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/lightning_logs_goodAug.csv') as file:  
+with open('') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
             continue
         ssd_aug_map.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/goodBase.csv') as f:  
+with open('') as f:  
     lines = csv.reader(f, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
             continue
         ssd_noaug_map.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/fasterrcnn_dfg_aug.json') as f:
+with open('') as f:
     result_file = json.load(f)
     for epoch in result_file.values():
         faster_rcnn_aug_map.append(float(epoch['validation_map']))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/fasterrcnn_dfg_noaug.json') as f:
+with open('') as f:
     result_file = json.load(f)
     for epoch in result_file.values():
         faster_rcnn_noaug_map.append(float(epoch['validation_map']))
@@ -53,4 +53,4 @@ plt.xlabel('Epoch')
 plt.ylabel('mAP@50') 
 plt.legend() 
 
-plt.savefig('/home/kornwolfd/ML_CV_practicalCourse/plots/DFGComparison.png')
+plt.savefig('')

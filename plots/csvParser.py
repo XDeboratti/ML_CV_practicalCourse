@@ -9,7 +9,7 @@ mapBad = []
 stepsGood = []
 mapGood = []
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/goodBase.csv') as file:  
+with open('') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
@@ -17,7 +17,7 @@ with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/goodBase.csv') a
         steps.append(int(row[1])) 
         map.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/badAugmentation.csv') as f:  
+with open('') as f:  
     lines = csv.reader(f, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
@@ -25,7 +25,7 @@ with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/badAugmentation.
         stepsBad.append(int(row[1])) 
         mapBad.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/lightning_logs_goodAug.csv') as f:  
+with open('') as f:  
     lines = csv.reader(f, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
@@ -53,4 +53,4 @@ plt.ylabel('mAP@50')
 #plt.title('Weather Report', fontsize = 20) 
 plt.legend() 
 
-plt.savefig('/home/kornwolfd/ML_CV_practicalCourse/plots/badAug.png')
+plt.savefig('')

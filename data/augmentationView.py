@@ -33,7 +33,7 @@ class DataAugmentation(nn.Module):
         # Convert the numpy array to a cv2 image
         cv2_image = np.transpose(np_image, (1, 2, 0))
 
-        cv2.imwrite('/graphics/scratch2/students/kornwolfd/data_RoadSigns/dfg/augmentedImagesScale/image_'+'0000197'+'.jpg', cv2_image)
+        cv2.imwrite('./aug'+'.jpg', cv2_image)
         self.uniqueFilename += 1
 
     
@@ -41,7 +41,7 @@ class DataAugmentation(nn.Module):
     
 
 
-data_dir = '/graphics/scratch2/students/kornwolfd/data_RoadSigns/dfg/'
+data_dir = '.'
 phase = 'train'
 
 #load and normlize the image

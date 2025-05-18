@@ -10,26 +10,26 @@ ssd_noaug_map = []
 ssd_aug_map = []
 
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/mapillary_ssd_augm_map.csv') as file:  
+with open('') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
             continue
         ssd_aug_map.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/map_lightning_logs_mapillary_ssd_lr0.001_momentum0.9_wd0.0005.csv') as f:  
+with open('') as f:  
     lines = csv.reader(f, delimiter=',') 
     for row in lines: 
         if 'Step' in row:
             continue
         ssd_noaug_map.append(float(row[2]))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/fasterrcnn_mapillary_aug.json') as f:
+with open('') as f:
     result_file = json.load(f)
     for epoch in result_file.values():
         faster_rcnn_aug_map.append(float(epoch['validation_map']))
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/fasterrcnn_mapillary_noaug.json') as f:
+with open('') as f:
     result_file = json.load(f)
     for epoch in result_file.values():
         faster_rcnn_noaug_map.append(float(epoch['validation_map']))
@@ -54,4 +54,4 @@ plt.xlabel('Epoch')
 plt.ylabel('mAP@50') 
 plt.legend() 
 
-plt.savefig('/home/kornwolfd/ML_CV_practicalCourse/plots/mapillaryComparison.png')
+plt.savefig('')
