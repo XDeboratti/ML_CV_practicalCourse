@@ -10,7 +10,7 @@ ssd_noaug_map = []
 ssd_aug_map = []
 
 
-with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/map_lightning_logs_mapillary_ssd_blur_noise_scale_tans.csv') as file:  
+with open('/home/kornwolfd/ML_CV_practicalCourse/plots/plotData/mapillary_ssd_augm_map.csv') as file:  
     lines = csv.reader(file, delimiter=',') 
     for row in lines: 
         if 'Step' in row:

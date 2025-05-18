@@ -22,7 +22,7 @@ class Mapillary_Dataset(Dataset):
     def __init__(self, aug_parameter, data_dir, phase='train'):
         super().__init__()
         self.aug_parameter = aug_parameter
-        self.augmentor = DataAugmentation()
+        #self.augmentor = DataAugmentation()
         self.data_dir = data_dir+phase+'ing/'+phase
         self.phase = phase
 
